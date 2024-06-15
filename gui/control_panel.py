@@ -5,7 +5,7 @@ import threading
 import random
 import uiautomator2 as u2
 import queue
-import time
+import time  # 导入 time 模块
 
 
 class ControlPanel:
@@ -144,29 +144,18 @@ class ControlPanel:
         self.liking_running = True
         self.operations = DeviceOperations(selected_devices, self)
         self.liking_threads = []
+        start_time = time.time()
         for device in selected_devices:
-            t = threading.Thread(target=self.like_worker, args=(self.operations, device))
+            t = threading.Thread(target=self.like_worker, args=(self.operations, device, start_time))
             t.daemon = True  # 将线程设置为守护线程
             self.liking_threads.append(t)
             t.start()
             print(f"[{device.serial}] 点赞线程启动")
 
-    def like_worker(self, operations, device):
-        start_time = time.time()
+    def like_worker(self, operations, device, start_time):
         while not operations.stop_event.is_set():
-            elapsed_time = time.time() - start_time
-            if elapsed_time <= 10:
-                like_frequency = random.uniform(0.2, 0.5)  # 前10秒每秒点赞2-5次
-            elif 10 < elapsed_time <= 25:
-                like_frequency = random.uniform(0.25, 1)  # 第11秒到第25秒每秒点赞1-4次
-            elif 25 < elapsed_time <= 145:
-                like_frequency = random.uniform(0.17, 0.5)  # 第26秒到第145秒每秒点赞2-6次
-            else:
-                like_frequency = random.uniform(0.14, 0.5)  # 第146秒开始每秒点赞2-7次
-
-            operations.double_click(device)
+            operations.double_click(device, start_time)
             self.queue.put(self.update_like_count)
-            time.sleep(like_frequency)
         print(f"[{device.serial}] 点赞线程已停止")
 
     def update_like_count(self):

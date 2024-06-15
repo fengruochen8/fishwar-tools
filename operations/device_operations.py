@@ -59,14 +59,24 @@ class DeviceOperations:
             print(f"[{device.serial}] 未找到UI控件: {e}")
             raise e
 
-    def double_click(self, device):
+    def double_click(self, device, start_time):
         while not self.stop_event.is_set():
+            elapsed_time = time.time() - start_time
+            if elapsed_time <= 10:
+                like_frequency = random.uniform(0.2, 0.5)  # 前10秒每秒点赞2-5次
+            elif 10 < elapsed_time <= 25:
+                like_frequency = random.uniform(0.25, 1)  # 第11秒到第25秒每秒点赞1-4次
+            elif 25 < elapsed_time <= 145:
+                like_frequency = random.uniform(0.17, 0.5)  # 第26秒到第145秒每秒点赞2-6次
+            else:
+                like_frequency = random.uniform(0.14, 0.5)  # 第146秒开始每秒点赞2-7次
+
             x = random.randint(390, 742)
             y = random.randint(942, 1335)
             print(f"[{device.serial}] 开始双击屏幕位置 ({x}, {y})")
             device.double_click(x, y)
             self.control_panel.queue.put(self.control_panel.update_like_count)
-            time.sleep(random.uniform(1, 2))
+            time.sleep(like_frequency)
             if self.stop_event.is_set():
                 print(f"[{device.serial}] 收到停止信号")
                 break
@@ -75,8 +85,9 @@ class DeviceOperations:
     def start_liking(self, devices):
         self.stop_event.clear()
         self.threads = []
+        start_time = time.time()
         for device in devices:
-            t = threading.Thread(target=self.double_click, args=(device,))
+            t = threading.Thread(target=self.double_click, args=(device, start_time))
             t.daemon = True
             self.threads.append(t)
             t.start()
