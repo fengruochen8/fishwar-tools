@@ -37,17 +37,17 @@ class DeviceOperations:
                 time.sleep(2)
 
                 print(f"[{device.serial}] 尝试点击发送按钮")
-                if device(resourceId="com.ss.android.ugc.aweme:id/j_e").exists(timeout=10):
+                if device(resourceId="m.l.live.plugin:id/input_panel_send_view").exists(timeout=10):
                     print(f"[{device.serial}] 找到了发送按钮")
                     print(
-                        f"[{device.serial}] 发送按钮控件信息: {device(resourceId='com.ss.android.ugc.aweme:id/j_e').info}")
-                    device(resourceId="com.ss.android.ugc.aweme:id/j_e").click()
+                        f"[{device.serial}] 发送按钮控件信息: {device(resourceId='m.l.live.plugin:id/input_panel_send_view').info}")
+                    device(resourceId="m.l.live.plugin:id/input_panel_send_view").click()
                     print(f"[{device.serial}] 点击发送按钮成功")
                     time.sleep(2)
                 else:
                     print(f"[{device.serial}] 未找到发送按钮")
                     raise u2.exceptions.UiObjectNotFoundError(
-                        {'code': -32002, 'data': "Selector [resourceId='com.ss.android.ugc.aweme:id/j_e']",
+                        {'code': -32002, 'data': "Selector [resourceId='m.l.live.plugin:id/input_panel_send_view']",
                          'method': 'wait'}
                     )
             else:
@@ -71,8 +71,8 @@ class DeviceOperations:
             else:
                 like_frequency = random.uniform(0.14, 0.5)  # 第146秒开始每秒点赞2-7次
 
-            x = random.randint(390, 742)
-            y = random.randint(942, 1335)
+            x = random.randint(189, 529)
+            y = random.randint(592, 778)
             print(f"[{device.serial}] 开始双击屏幕位置 ({x}, {y})")
             device.double_click(x, y)
             self.control_panel.queue.put(self.control_panel.update_like_count)

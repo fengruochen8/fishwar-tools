@@ -5,7 +5,7 @@ import threading
 import random
 import uiautomator2 as u2
 import queue
-import time  # 导入 time 模块
+import time
 
 
 class ControlPanel:
@@ -87,8 +87,8 @@ class ControlPanel:
 
     def random_assign(self):
         num_devices = len([var for var in self.device_vars if var._name != "disabled"])
-        assignment = [1] * (num_devices // 2) + [2] * (num_devices // 2)
-        if num_devices % 2:
+        assignment = [1] * (num_devices // 2) + [2] * (numdevices // 2)
+        if numdevices % 2:
             assignment.append(1)
         random.shuffle(assignment)
         index = 0
