@@ -3,7 +3,6 @@ import threading
 import random
 import time
 
-
 class DeviceOperations:
     def __init__(self, devices, control_panel):
         self.devices = devices
@@ -37,19 +36,22 @@ class DeviceOperations:
                 time.sleep(2)
 
                 print(f"[{device.serial}] 尝试点击发送按钮")
-                if device(resourceId="m.l.live.plugin:id/input_panel_send_view").exists(timeout=10):
-                    print(f"[{device.serial}] 找到了发送按钮")
-                    print(
-                        f"[{device.serial}] 发送按钮控件信息: {device(resourceId='m.l.live.plugin:id/input_panel_send_view').info}")
+                if device(resourceId="com.ss.android.ugc.aweme:id/j_e").exists(timeout=10):
+                    print(f"[{device.serial}] 找到了发送按钮 (com.ss.android.ugc.aweme:id/j_e)")
+                    print(f"[{device.serial}] 发送按钮控件信息: {device(resourceId='com.ss.android.ugc.aweme:id/j_e').info}")
+                    device(resourceId="com.ss.android.ugc.aweme:id/j_e").click()
+                    print(f"[{device.serial}] 点击发送按钮成功 (com.ss.android.ugc.aweme:id/j_e)")
+                elif device(resourceId="m.l.live.plugin:id/input_panel_send_view").exists(timeout=10):
+                    print(f"[{device.serial}] 找到了发送按钮 (m.l.live.plugin:id/input_panel_send_view)")
+                    print(f"[{device.serial}] 发送按钮控件信息: {device(resourceId='m.l.live.plugin:id/input_panel_send_view').info}")
                     device(resourceId="m.l.live.plugin:id/input_panel_send_view").click()
-                    print(f"[{device.serial}] 点击发送按钮成功")
-                    time.sleep(2)
+                    print(f"[{device.serial}] 点击发送按钮成功 (m.l.live.plugin:id/input_panel_send_view)")
                 else:
                     print(f"[{device.serial}] 未找到发送按钮")
                     raise u2.exceptions.UiObjectNotFoundError(
-                        {'code': -32002, 'data': "Selector [resourceId='m.l.live.plugin:id/input_panel_send_view']",
-                         'method': 'wait'}
+                        {'code': -32002, 'data': "Selector [resourceId='com.ss.android.ugc.aweme:id/j_e' or 'm.l.live.plugin:id/input_panel_send_view']", 'method': 'wait'}
                     )
+                time.sleep(2)
             else:
                 print(f"[{device.serial}] 未找到输入框")
                 raise u2.exceptions.UiObjectNotFoundError(
